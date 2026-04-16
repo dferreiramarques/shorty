@@ -12,12 +12,16 @@ export interface UrlEntry {
 }
 
 export async function getUrl(slug: string): Promise<string | null> {
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('urls')
     .select('original_url')
     .eq('slug', slug)
     .single();
-  return data?.original_url || null;
+
+  if (error || !data) {
+    return null;
+  }
+  return data.original_url;
 }
 
 export async function setUrl(slug: string, originalUrl: string): Promise<{ success: boolean; error?: string }> {

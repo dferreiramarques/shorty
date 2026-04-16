@@ -7,7 +7,11 @@ export async function GET(
 ) {
   const { slug } = await params;
   
-  if (!slug || slug === 'favicon.ico' || slug === 'api') {
+  if (!slug || slug === 'favicon.ico' || slug === 'api' || slug.startsWith('_')) {
+    return NextResponse.next();
+  }
+
+  if (!/^[a-zA-Z0-9-]+$/.test(slug)) {
     return NextResponse.next();
   }
 
